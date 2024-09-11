@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { MdDelete } from "react-icons/md";
 import { FaCheck } from "react-icons/fa";
+import { ImCross } from "react-icons/im";
 import axios from "axios";
 
 const Home = () => {
@@ -36,7 +37,9 @@ const Home = () => {
   };
 
   const handleDone = (id) => {
-    axios.put(`http://localhost:3001/todo/${id}`);
+    axios.put(`http://localhost:3001/todo/${id}`).then((res) => {
+      setTodos(res.data);
+    });
   };
 
   const handleDelete = (id) => {
@@ -117,7 +120,13 @@ const Home = () => {
             {todos.map((todo) => {
               return (
                 <li
-                  className="bg-zinc-700 rounded-xl p-3 w-full flex items-center justify-between"
+                  className={`font-semibold rounded-xl p-3 w-full flex items-center justify-between
+                    ${
+                      todo.completed
+                        ? "bg-green-200 text-green-700"
+                        : "bg-red-200 text-red-700"
+                    }
+                    `}
                   key={todo._id}
                   id={`todo-${todo._id}`} // Adding a unique id to the li
                 >
@@ -127,17 +136,27 @@ const Home = () => {
                     className="flex gap-2"
                   >
                     <button
-                      className=" p-2 rounded-xl bg-red-500 shadow-inner shadow-red-600"
+                      className=" p-2 rounded-xl bg-red-200  text-red-700 shadow-inner shadow-red-600"
                       onClick={() => handleDelete(todo._id)}
                     >
                       <MdDelete />
                     </button>
-                    <button
-                      className="shadow-green-500 shadow-inner p-2 rounded-xl bg-green-500 text-sm"
-                      onClick={() => handleDone(todo._id)}
-                    >
-                      <FaCheck />
-                    </button>
+
+                    {todo.completed ? (
+                      <button
+                        className="shadow-red-500 shadow-inner p-2 rounded-xl bg-red-200 text-[12px] text-red-700"
+                        onClick={() => handleDone(todo._id)}
+                      >
+                        <ImCross />
+                      </button>
+                    ) : (
+                      <button
+                        className="shadow-green-500 shadow-inner p-2 rounded-xl bg-green-200 text-green-700 text-[12px]"
+                        onClick={() => handleDone(todo._id)}
+                      >
+                        <FaCheck />
+                      </button>
+                    )}
                   </div>
                 </li>
               );
@@ -175,7 +194,15 @@ const Home = () => {
                 {task.todos.map((todo) => {
                   return (
                     <div className="mb-3" key={todo._id}>
-                      <h1 className="bg-zinc-700 rounded-xl p-3 w-full flex items-center justify-between ">
+                      <h1
+                        className={` rounded-xl p-3 w-full flex items-center justify-between
+                          ${
+                            todo.completed
+                              ? "bg-green-200 text-green-700"
+                              : "bg-red-200 text-red-700"
+                          }
+                          `}
+                      >
                         {todo.todo}
                       </h1>
                     </div>
