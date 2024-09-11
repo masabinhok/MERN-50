@@ -3,12 +3,14 @@ import { useState, useEffect } from "react";
 import { MdDelete } from "react-icons/md";
 import { FaCheck } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
+import { FcAbout } from "react-icons/fc";
 import axios from "axios";
 
 const Home = () => {
   const [newTodo, setNewTodo] = useState("");
   const [todos, setTodos] = useState([]);
   const [tasks, setTasks] = useState([]);
+  const [about, setAbout] = useState(false);
 
   const [date, setDate] = useState("2024-09-11");
 
@@ -59,26 +61,69 @@ const Home = () => {
         setTasks(res.data);
       });
   };
+
+  const handleAbout = () => {
+    about ? setAbout(false) : setAbout(true);
+  };
+
   const formatDate = (dateString) => {
     const date = new Date(dateString); // Create a Date object
 
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // getMonth() is zero-based
-    const day = String(date.getDate()).padStart(2, "0"); // Add leading zero if needed
-
-    return `${year}-${month}-${day}`; // Format it to YYYY-MM-DD
+    const month = date.toLocaleString("en-US", { month: "short" });
+    const day = String(date.getDate()).padStart(2, "0");
+    return `-${month} ${day} ${year}`;
   };
 
   return (
     <div className="container bg-zinc-900  text-slate-100 min-h-screen max-w-full flex items-center p-10 flex-col">
-      <div className="container flex justify-center w-full max-w-full h-[100px]">
-        <h1 className="text-green-400 font-bold font-mono text-2xl">
-          MERN-zincslate
+      <div className="container flex justify-center w-full max-w-full mb-10">
+        {" "}
+        <h1 className="text-slate-400 font-bold font-mono text-3xl">
+          MERN-zincslate 01
         </h1>
       </div>
       <div className="container flex flex-col items-center w-full max-w-[400px]">
         {" "}
-        <h1 className="text-5xl font-bold ">Todo List</h1>
+        <h1 className="text-5xl font-bold gap-3 items-center justify-center  flex  ">
+          Todo List
+          <button className="text-2xl" onClick={() => handleAbout()}>
+            <FcAbout />
+          </button>
+        </h1>
+        <div
+          className={`container max-w-md w-full p-6 mt-20 absolute z-50 bg-purple-200 text-purple-900 rounded-xl shadow-lg shadow-purple-400 font-mono ${
+            about ? "hidden" : "block"
+          }`}
+        >
+          <h1 className="text-2xl font-bold mb-4 flex justify-between">
+            Things to Remember!
+            <button
+              className="text-red-500 text-sm"
+              onClick={() => handleAbout()}
+            >
+              <ImCross />
+            </button>
+          </h1>
+          <ul className="list-disc ml-5 space-y-2 text-sm">
+            <li>
+              You can save your todo daily and track what you completed or
+              procrastinated.
+            </li>
+            <li>You cannot edit after saving the data.</li>
+            <li className="text-green-700 font-semibold">
+              Green is accomplished!
+            </li>
+            <li className="text-red-600 font-semibold">Red is incomplete!</li>
+            <li>Clearing saved history is irreversible.</li>
+          </ul>
+          <p className="mt-4 text-sm">
+            This is my first MERN stack project in the series MERN-zincslate 50.
+          </p>
+          <h1 className="mt-6 font-semibold text-lg text-right">
+            Created By - Sabin Shrestha
+          </h1>
+        </div>
         <div className="pt-10 pb-4 flex gap-4 w-full max-w-[400px]">
           <input
             className="p-2 rounded-xl text-black focus:outline-none shadow-zinc-500 shadow-inner w-full flex-1"
