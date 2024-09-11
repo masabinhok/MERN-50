@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const todoModel = require("./models/todo");
+const taskModel = require("./models/task");
 
 const app = express();
 const port = 3001;
@@ -35,7 +36,11 @@ app.post("/todo", async (req, res) => {
 
 app.get("/", async (req, res) => {
   const todos = await todoModel.find();
-  res.send(todos);
+  const tasks = await taskModel.find();
+  res.send({
+    todos,
+    tasks,
+  });
 });
 
 app.delete("/todo/:id", async (req, res) => {
@@ -50,6 +55,42 @@ app.put("/todo/:id", async (req, res) => {
   const todo = await todoModel.findOneAndUpdate({ completed: true });
   const todos = await todoModel.find();
   res.send(todos);
+});
+
+app.post("/save", async (req, res) => {
+  await todoModel.deleteMany();
+  const { date, todos } = req.body;
+  const task = await taskModel.find({
+    date,
+  });
+
+  if (task.length > 0) {
+    const updatedTask = await taskModel.findOneAndUpdate(
+      {
+        date,
+      },
+      {
+        $push: {
+          todos: todos,
+        },
+      }
+    );
+    const tasks = await taskModel.find();
+    res.send(tasks);
+  } else {
+    const newTask = await taskModel.create({
+      date,
+      todos,
+    });
+
+    const tasks = await taskModel.find();
+    res.send(tasks);
+  }
+});
+
+app.delete("/task", async (req, res) => {
+  const tasks = await taskModel.deleteMany();
+  res.send(tasks);
 });
 
 app.listen(port, () => {
