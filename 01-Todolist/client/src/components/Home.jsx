@@ -33,9 +33,14 @@ const Home = () => {
   };
 
   const handleClear = () => {
-    axios.delete("http://localhost:3001/task").then((res) => {
-      setTasks([]);
-    });
+    let result = window.confirm(
+      "Are you sure you want to delete all tasks? It is irreversible."
+    );
+    if (result) {
+      axios.delete("http://localhost:3001/task").then((res) => {
+        setTasks([]);
+      });
+    }
   };
 
   const handleDone = (id) => {
@@ -45,9 +50,13 @@ const Home = () => {
   };
 
   const handleDelete = (id) => {
-    axios.delete(`http://localhost:3001/todo/${id}`).then((res) => {
-      setTodos(res.data);
-    });
+    const result = window.confirm("Are you sure you want to delete?");
+    console.log(result);
+    if (result) {
+      axios.delete(`http://localhost:3001/todo/${id}`).then((res) => {
+        setTodos(res.data);
+      });
+    }
   };
 
   const handleSave = () => {
@@ -72,7 +81,7 @@ const Home = () => {
     const year = date.getFullYear();
     const month = date.toLocaleString("en-US", { month: "short" });
     const day = String(date.getDate()).padStart(2, "0");
-    return `-${month} ${day} ${year}`;
+    return `${month} ${day} ${year}`;
   };
 
   return (
@@ -142,7 +151,7 @@ const Home = () => {
       </div>
       <div className="container flex flex-col justify-center w-full max-w-[400px] gap-4 ">
         {todos.length === 0 ? (
-          <div className="bg-zinc-700 justify-center rounded-xl p-3 w-full flex ">
+          <div className="bg-orange-200  text-orange-700 font-bold font-mono justify-center rounded-xl p-3 w-full flex ">
             You are a free bird ! Enjoyyy 🎉
           </div>
         ) : (
@@ -228,10 +237,13 @@ const Home = () => {
         ) : (
           tasks.map((task) => {
             return (
-              <div key={task._id} className="flex flex-col w-full pt-10">
+              <div
+                key={task._id}
+                className="flex flex-col w-full pt-6 bg-zinc-300 rounded-xl mt-8 p-3 "
+              >
                 <div className="flex gap-3 mb-3 ">
                   {" "}
-                  <h1 className="bg-zinc-100 text-zinc-800 rounded-xl p-3 w-full flex items-center justify-between">
+                  <h1 className="bg-zinc-100 shadow-inner shadow-zinc-200 text-zinc-800 rounded-xl p-3 w-full flex items-center justify-between font-bold">
                     {formatDate(task.date)}
                   </h1>
                 </div>
@@ -240,7 +252,7 @@ const Home = () => {
                   return (
                     <div className="mb-3" key={todo._id}>
                       <h1
-                        className={` rounded-xl p-3 w-full flex items-center justify-between
+                        className={` rounded-xl p-3 w-full flex items-center justify-between shadow-white shadow-inner
                           ${
                             todo.completed
                               ? "bg-green-200 text-green-700"
