@@ -7,7 +7,7 @@ import { FcAbout } from "react-icons/fc";
 import axios from "axios";
 
 const REACT_APP_BACKEND_URL =
-  process.env.REACT_APP_BACKEND_URL || "https://mern-50-dy9o.onrender.com/";
+  process.env.REACT_APP_BACKEND_URL || "https://mern-50-dy9o.onrender.com";
 
 const Home = () => {
   const [newTodo, setNewTodo] = useState("");
@@ -26,7 +26,7 @@ const Home = () => {
 
   const handleAdd = () => {
     axios
-      .post(REACT_APP_BACKEND_URL, {
+      .post(`${REACT_APP_BACKEND_URL}/todo`, {
         todo: newTodo,
       })
       .then((res) => {
@@ -40,14 +40,14 @@ const Home = () => {
       "Are you sure you want to delete all tasks? It is irreversible."
     );
     if (result) {
-      axios.delete(`${REACT_APP_BACKEND_URL}task`).then((res) => {
+      axios.delete(`${REACT_APP_BACKEND_URL}/task`).then((res) => {
         setTasks([]);
       });
     }
   };
 
   const handleDone = (id) => {
-    axios.put(`${REACT_APP_BACKEND_URL}todo/${id}`).then((res) => {
+    axios.put(`${REACT_APP_BACKEND_URL}/todo/${id}`).then((res) => {
       setTodos(res.data);
     });
   };
@@ -56,7 +56,7 @@ const Home = () => {
     const result = window.confirm("Are you sure you want to delete?");
     console.log(result);
     if (result) {
-      axios.delete(`${REACT_APP_BACKEND_URL}todo/${id}`).then((res) => {
+      axios.delete(`${REACT_APP_BACKEND_URL}/todo/${id}`).then((res) => {
         setTodos(res.data);
       });
     }
@@ -64,7 +64,7 @@ const Home = () => {
 
   const handleSave = () => {
     axios
-      .post(`${REACT_APP_BACKEND_URL}save`, {
+      .post(`${REACT_APP_BACKEND_URL}/save`, {
         date: date,
         todos: todos,
       })
