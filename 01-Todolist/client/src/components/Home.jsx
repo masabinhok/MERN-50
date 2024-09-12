@@ -6,7 +6,8 @@ import { ImCross } from "react-icons/im";
 import { FcAbout } from "react-icons/fc";
 import axios from "axios";
 
-const REACT_APP_BACKEND_URL = "https://mern-50-dy9o.onrender.com/";
+const REACT_APP_BACKEND_URL =
+  process.env.REACT_APP_BACKEND_URL || "https://mern-50-dy9o.onrender.com/";
 
 const Home = () => {
   const [newTodo, setNewTodo] = useState("");
