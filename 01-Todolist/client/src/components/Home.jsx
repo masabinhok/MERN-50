@@ -6,6 +6,8 @@ import { ImCross } from "react-icons/im";
 import { FcAbout } from "react-icons/fc";
 import axios from "axios";
 
+const REACT_APP_BACKEND_URL = "https://mern-50-dy9o.onrender.com/";
+
 const Home = () => {
   const [newTodo, setNewTodo] = useState("");
   const [todos, setTodos] = useState([]);
@@ -15,7 +17,7 @@ const Home = () => {
   const [date, setDate] = useState("2024-09-11");
 
   useEffect(() => {
-    axios.get("http://localhost:3001").then((res) => {
+    axios.get(REACT_APP_BACKEND_URL).then((res) => {
       setTodos(res.data.todos);
       setTasks(res.data.tasks);
     });
@@ -23,7 +25,7 @@ const Home = () => {
 
   const handleAdd = () => {
     axios
-      .post("http://localhost:3001/todo", {
+      .post(REACT_APP_BACKEND_URL, {
         todo: newTodo,
       })
       .then((res) => {
@@ -37,14 +39,14 @@ const Home = () => {
       "Are you sure you want to delete all tasks? It is irreversible."
     );
     if (result) {
-      axios.delete("http://localhost:3001/task").then((res) => {
+      axios.delete(`${REACT_APP_BACKEND_URL}task`).then((res) => {
         setTasks([]);
       });
     }
   };
 
   const handleDone = (id) => {
-    axios.put(`http://localhost:3001/todo/${id}`).then((res) => {
+    axios.put(`${REACT_APP_BACKEND_URL}todo/${id}`).then((res) => {
       setTodos(res.data);
     });
   };
@@ -53,7 +55,7 @@ const Home = () => {
     const result = window.confirm("Are you sure you want to delete?");
     console.log(result);
     if (result) {
-      axios.delete(`http://localhost:3001/todo/${id}`).then((res) => {
+      axios.delete(`${REACT_APP_BACKEND_URL}todo/${id}`).then((res) => {
         setTodos(res.data);
       });
     }
@@ -61,7 +63,7 @@ const Home = () => {
 
   const handleSave = () => {
     axios
-      .post("http://localhost:3001/save", {
+      .post(`${REACT_APP_BACKEND_URL}save`, {
         date: date,
         todos: todos,
       })
